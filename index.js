@@ -87,7 +87,7 @@ raisedCard.innerHTML = `$${totalRaised.toLocaleString('en-US')}`;
 
 // grab number of games card and set its inner HTML
 const gamesCard = document.getElementById("num-games");
-gamesCard.innerHTML = gamesContainer.getElementsByTagName("div").length;
+gamesCard.innerHTML = GAMES_JSON.length;
 
 /*************************************************************************************
  * Challenge 5: Add functions to filter the funded and unfunded games
@@ -107,7 +107,6 @@ function filterUnfundedOnly() {
 
     // use the function we previously created to add the unfunded games to the DOM
     addGamesToPage(underfundedGames);
-    gamesCard.innerHTML = gamesContainer.getElementsByTagName("div").length; // update the total number of games container
     return underfundedGames;
 }
 
@@ -122,7 +121,6 @@ function filterFundedOnly() {
 
     // use the function we previously created to add funded games to the DOM
     addGamesToPage(fundedGames);
-    gamesCard.innerHTML = gamesContainer.getElementsByTagName("div").length; // update the total number of games container
     return fundedGames;
 }
 
@@ -132,7 +130,6 @@ function showAllGames() {
 
     // add all games from the JSON data to the DOM
     addGamesToPage(GAMES_JSON);
-    gamesCard.innerHTML = gamesContainer.getElementsByTagName("div").length; // update the total number of games container
 
 }
 
@@ -155,12 +152,15 @@ allBtn.addEventListener("click", showAllGames);
 const descriptionContainer = document.getElementById("description-container");
 
 // use filter or reduce to count the number of unfunded games
-
+const numUnfunded = GAMES_JSON.filter((game) => game.pledged < game.goal).length;
 
 // create a string that explains the number of unfunded games using the ternary operator
-
+const unfundedDisplayStr = `A total of $${totalRaised} has been raised for ${gamesCard.innerHTML}. Currently, ${numUnfunded} ${numUnfunded > 1 || numUnfunded != 0? "games remain" : "game remains"} unfunded. We need your help to fun these amazing games!`;
 
 // create a new DOM element containing the template string and append it to the description container
+const underfundedHTMLElem = document.createElement("p");
+underfundedHTMLElem.innerHTML = unfundedDisplayStr;
+descriptionContainer.innerHTML += underfundedHTMLElem;
 
 /************************************************************************************
  * Challenge 7: Select & display the top 2 games
